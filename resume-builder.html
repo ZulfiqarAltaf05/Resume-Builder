@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resume</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        background-color: #f4f4f4;
+    }
+    .resume {
+        background-color: white;
+        padding: 20px;
+        border: 1px solid #ddd;
+        display: flex;
+        flex-direction: column;
+    }
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+.header-left h1,
+.contact-info div {
+    display: inline-block;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s ease;
+}
+
+.header-left h1:focus,
+.contact-info div:focus {
+    border-bottom: 1px solid #333;
+    outline: none;
+}
+
+.header-left {
+    max-width: 60%;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+    .header-left h1 {
+        margin: 0;
+        font-size: 28px;
+        max-width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        display: inline-block;
+    }
+
+    .contact-info {
+        text-align: right;
+        font-size: 14px;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .header-left .title {
+        font-size: 16px;
+        color: #666;
+    }
+    .contact-info {
+        text-align: right;
+        font-size: 14px;
+        color: #333;
+    }
+    .contact-info div {
+        margin-top: 5px;
+    }
+    .main-content {
+        display: flex;
+    }
+    .left-column, .right-column {
+        width: 48%;
+    }
+    .left-column {
+        margin-right: 4%;
+    }
+
+    #skills-list {
+        display: flex;
+        flex-wrap: wrap;
+        list-style-type: none;
+        padding: 0;
+        margin: 10px 0;
+    }
+
+    #skills-list li {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        margin: 5px 0;
+        padding: 5px 10px;
+        border-bottom: 1px dashed #ddd; /* Underline for a cleaner look */
+        width: 48%; /* Ensures two skill items per row */
+        box-sizing: border-box;
+        cursor: text;
+        transition: color 0.3s ease;
+    }
+
+    #skills-list li:before {
+        content: "✓"; /* Symbol before each skill */
+        color: #007bff;
+        margin-right: 8px;
+        font-weight: bold;
+    }
+
+    #skills-list li:focus {
+        color: #007bff;
+        border-bottom: 1px dashed #007bff; /* Highlighted underline on focus */
+        outline: none;
+    }
+
+    .section button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        margin-top: 10px;
+        font-size: 14px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .section button:hover {
+        background-color: #0056b3;
+    }
+
+#language-list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0;
+} 
+
+#language-list li {
+display: flex;
+align-items: center;
+font-size: 14px;
+margin: 5px 0;
+padding: 5px 10px;
+border-bottom: 1px dashed #ddd;
+width: 48%;
+box-sizing: border-box;
+cursor: text;
+transition: color 0.3s ease;
+}
+
+#languages-list li:before {
+        content: "✓";
+        color: #007bff;
+        margin-right: 8px;
+        font-weight: bold;
+    }
+
+    #languages-list li:focus {
+        color: #007bff;
+        border-bottom: 1px dashed #007bff;
+        outline: none;
+    }
+
+    .section button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        font-size: 14px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: background-color 0.3s ease;
+    }
+
+    .section button:hover {
+        background-color: #0056b3;
+    }
+
+    .divider {
+        width: 1%;
+        background-color: #ddd;
+        margin-right: 4%;
+    }
+    .section {
+        margin-bottom: 20px;
+    }
+    .section-title {
+        font-size: 20px;
+        font-family: 'Courier New', Courier, monospace;
+        font-weight: bold;
+        color: #007bff;
+        border-bottom: 2px solid black;
+        padding-bottom: 5px;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+    }
+
+    .personal-info {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .personal-info div{
+        font-size: small;
+        color: #013a77;
+    }
+
+.personal-info div::before{
+    content: "✓";
+}
+
+    .editable-input {
+        width: 100%;
+        border: none;
+        border-bottom: 1px solid #ddd;
+        font-size: 14px;
+        padding: 5px 0;
+        margin-bottom: 10px;
+    }
+    .editable-input:focus {
+        outline: none;
+        border-bottom: 1px solid #333;
+    }
+    .qualification-section {
+        margin-bottom: 15px;
+        display: none;
+    }
+
+
+
+    .in-progress {
+        font-size: 14px;
+    }
+</style>
+</head>
+<body>
+<div class="resume" id="resume-content">
+    <div class="header">
+        <!-- Left side: Name and title -->
+        <div class="header-left">
+            <h1 contenteditable="true" onfocus="clearOnFocus(this)">Enter Name</h1>
+             </div>
+
+        <!-- Right side: Contact information -->
+        <div class="contact-info">
+            <div>
+                <span>📞</span>
+                <div contenteditable="true" class="editable" onfocus="clearOnFocus(this)">Cell</div>
+            </div>
+            <div>
+                <span>📧</span>
+                <div contenteditable="true" class="editable" onfocus="clearOnFocus(this)">Email</div>
+            </div>
+            <div>
+                <span>📍</span>
+                <div contenteditable="true" class="editable" onfocus="clearOnFocus(this)">Address</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <!-- Left Column -->
+        <div class="left-column">
+            <div class="section">
+                <div class="section-title">Education</div>
+                
+                <!-- Dropdown to select highest qualification -->
+                <label for="education-level">Select your highest qualification:</label>
+                <select id="education-level" onchange="showEducationFields()">
+                    <option value="">Select Qualification</option>
+                    <option value="matric">Matriculation</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="bachelor">Bachelor's Degree</option>
+                    <option value="master">Master's Degree</option>
+                </select>
+
+                <!-- Matriculation -->
+                <div id="matric" class="qualification-section">
+                    <label><strong>Matriculation</strong></label><br>
+                    <input type="text" class="editable-input" placeholder="Institution Name">
+                    <input type="text" class="editable-input" placeholder="Grade">
+                </div>
+
+                <!-- Intermediate -->
+                <div id="intermediate" class="qualification-section">
+                    <label><strong>Intermediate</strong></label><br>
+                    <input type="text" class="editable-input" placeholder="Institution Name (e.g., XYZ College)">
+                    <input type="text" class="editable-input" placeholder="Grade">
+                </div>
+
+                <!-- Bachelor's Degree -->
+                <div id="bachelor" class="qualification-section">
+                    <label><strong>Bachelor's Degree</strong></label><br>
+                    <input type="text" class="editable-input" placeholder="Degree (e.g., Bachelor of Science)">
+                    <input type="text" class="editable-input" placeholder="Institution Name (e.g., XYZ University)">
+                    <input type="text" class="editable-input" placeholder="Grade">
+                </div>
+
+                <!-- Master's Degree -->
+                <div id="master" class="qualification-section">
+                    <label><strong>Master's Degree</strong></label><br>
+                    <input type="text" class="editable-input" placeholder="Degree (e.g., Master of Science)">
+                    <input type="text" class="editable-input" placeholder="Institution Name (e.g., XYZ University)">
+                    <input type="text" class="editable-input" placeholder="Grade">
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Skills</div>
+                <ul id="skills-list">
+                    <li contenteditable="true" onfocus="clearOnFocus(this)">New Skill</li>
+                </ul>
+                <button onclick="addSkill()">Add Skill</button>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Languages</div>
+                <ul id="languages-list">
+                    <li contenteditable="true" onfocus="clearOnFocus(this)">New Language</li>
+                </ul>
+                <button onclick="addLanguage()">Add Language</button>
+            </div>    
+
+</div>
+
+        <!-- Divider -->
+        <div class="divider"></div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+            <div class="section">
+                <div class="section-title">Career Objective</div>
+                <p contenteditable="true" aria-placeholder="Career Objective"></p>
+            </div>
+
+            <div class="section">
+                <div class="section-title">Personal Information</div>
+                <div class="personal-info">
+                    <div class="field-container"><span class="symbol"><b> Father Name:</b></span><input type="text" class="editable-input" placeholder=""></div>
+                    <div class="field-container"><span class="symbol"><b>Surname:</b></span><input type="text" class="editable-input" placeholder=""></div>
+                    <div class="field-container"><span class="symbol"><b>DOB:</b></span><input type="date" class="editable-input" placeholder=""></div>
+                    <div class="field-container"><span class="symbol"><b>CNIC No:</b></span><input type="text" class="editable-input" placeholder=""></div>
+                    <div class="field-container"><span class="symbol"><b>Domicile-District:</b></span><input type="text" class="editable-input" placeholder=""></div>
+                    <div class="field-container"><span class="symbol"><b>Nationality:</b></span><input type="text" class="editable-input" placeholder=""></div>
+                    <div class="field-container"><span class="symbol"><b>Martial Status:</b></span><input type="text" class="editable-input" placeholder=""></div>
+                    <div class="field-container"><span class="symbol"><b>Religion:</b></span><input type="text" class="editable-input" placeholder=""></div></div>
+               </div>
+
+            <div class="section">
+                <div class="section-title">Experience</div>
+                <button onclick="addFresh()">Fresh</button>
+                <button onclick="addExperience()">Experience</button>
+                <div id="experience-section"></div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">Description</div>
+                <textarea placeholder="Enter a brief description of your skills, experiences, and career objectives" class="editable-input" rows="5"></textarea>
+            </div>
+
+           </div>
+    </div>
+</div>
+<div style="text-align: center; margin-top: 20px;">
+    <button onclick="printResume()">Print Resume</button>
+</div>
+<script>
+     function showEducationFields(){
+        const educationLevel = document.getElementById('education-level').value;
+        const sections = ['matric', 'intermediate', 'bachelor', 'master'];
+        sections.forEach((section) => {
+            if (section === educationLevel) {
+                document.getElementById(section).style.display = 'block'; 
+            } else if (!document.getElementById(section).style.display) {
+                document.getElementById(section).style.display = 'none';
+            }
+        });
+     }
+
+     
+     function addSkill() {
+        const skillsList = document.getElementById("skills-list");
+        const newSkill = document.createElement("li");
+        newSkill.contentEditable = "true";
+        newSkill.textContent = "New Skill";
+        newSkill.onfocus = function() { clearOnFocus(newSkill); };
+        skillsList.appendChild(newSkill);
+    }
+
+    function addLanguage() {
+        const languagesList = document.getElementById("languages-list");
+        const newLanguage = document.createElement("li");
+        newLanguage.contentEditable = "true";
+        newLanguage.textContent = "New Language";
+        newLanguage.onfocus = function() { clearOnFocus(newLanguage); };
+        languagesList.appendChild(newLanguage);
+    }
+
+
+    function clearOnFocus(element) {
+        if (!element.dataset.cleared) {
+            element.textContent = "";
+            element.dataset.cleared = "true";
+        }
+    }
+
+    function addFresh() {
+        const experienceSection = document.getElementById("experience-section");
+        experienceSection.innerHTML = "<p>Fresh</p>"; // Adds the "Fresh" text when clicked
+    }
+
+    function clearOnFocus(element) {
+            if (element.getAttribute("data-cleared") !== "true") {
+                element.innerText = ""; // Clear the content
+                element.setAttribute("data-cleared", "true"); // Mark as cleared
+            }
+        }
+
+    function addExperience() {
+        const experienceSection = document.getElementById("experience-section");
+        
+        // Creates input fields for Job Title, From-To, and Description
+        experienceSection.innerHTML = `
+            <div>
+                <input type="text" placeholder="Job Title" class="editable-input">
+                <input type="text" placeholder="From - To" class="editable-input">
+                <textarea placeholder="Description" class="editable-input" rows="3"></textarea>
+            </div>
+        `;
+    }
+
+    function downloadPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Optional: Customize PDF appearance
+        doc.html(document.getElementById("resume-content"), {
+            callback: function (pdf) {
+                pdf.save("resume.pdf");
+            },
+            x: 10,
+            y: 10
+        });
+    }
+
+    // Function to print the resume
+    function printResume() {
+        window.print();
+    }
+
+</script>
+</body>
+</html>
